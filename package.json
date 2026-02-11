@@ -1,0 +1,23 @@
+{
+  "name": "gitflow-to-trunk",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Git Flow to Trunk-Based Development migration tool — analyze, migrate, and educate",
+  "workspaces": [
+    "packages/*"
+  ],
+  "scripts": {
+    "build": "turbo build",
+    "dev": "turbo dev",
+    "lint": "turbo lint",
+    "clean": "turbo clean"
+  },
+  "devDependencies": {
+    "turbo": "^2.4.0",
+    "typescript": "^5.7.0"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "packageManager": "npm@10.0.0"
+}
