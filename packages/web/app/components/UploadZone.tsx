@@ -17,7 +17,7 @@ export function UploadZone({
       try {
         const text = await file.text();
         const json = JSON.parse(text);
-        if (!json.report || !json.branches) {
+        if (!json.report || !Array.isArray(json.branches)) {
           setError("Invalid export file. Run `gf2t export` to generate one.");
           return;
         }
