@@ -4,7 +4,8 @@
   "private": true,
   "description": "Git Flow to Trunk-Based Development migration tool — analyze, migrate, and educate",
   "workspaces": [
-    "packages/*"
+    "packages/*",
+    "scripts"
   ],
   "scripts": {
     "build": "turbo build",

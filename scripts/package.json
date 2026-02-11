@@ -1,0 +1,16 @@
+{
+  "name": "@gf2t/scripts",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "generate-mock": "npx tsx scripts/generate-mock-repo.ts"
+  },
+  "devDependencies": {
+    "tsx": "^4.19.0",
+    "@types/node": "^20.0.0"
+  },
+  "dependencies": {
+    "simple-git": "^3.27.0"
+  }
+}
