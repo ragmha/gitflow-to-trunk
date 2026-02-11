@@ -48,7 +48,8 @@ export async function analyzeGitHubRepository(
     if (!res.ok) {
       throw new Error(`GitHub API error: ${res.status} ${res.statusText} for ${path}`);
     }
-    return res.json() as Promise<T>;
+    const data = await res.json();
+    return data as T;
   };
 
   // Paginate all branches
@@ -58,6 +59,7 @@ export async function analyzeGitHubRepository(
     const batch = await apiFetch<GitHubBranchResponse[]>(
       `/repos/${owner}/${repo}/branches?per_page=100&page=${page}`,
     );
+    if (batch.length === 0) break;
     allGhBranches.push(...batch);
     if (batch.length < 100) break;
     page++;
@@ -84,7 +86,12 @@ export async function analyzeGitHubRepository(
       commit = await apiFetch<GitHubCommitResponse>(
         `/repos/${owner}/${repo}/commits/${ghBranch.commit.sha}`,
       );
-    } catch {
+      if (!commit?.commit?.author?.date) {
+        console.warn(`Skipping branch "${ghBranch.name}": incomplete commit data`);
+        continue;
+      }
+    } catch (err) {
+      console.warn(`Skipping branch "${ghBranch.name}": ${err instanceof Error ? err.message : err}`);
       continue;
     }
 
