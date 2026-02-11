@@ -1,0 +1,42 @@
+name: Analyze Repository
+
+on:
+  workflow_dispatch:
+    inputs:
+      repository:
+        description: 'Repository to analyze (owner/repo format)'
+        required: true
+        type: string
+
+permissions:
+  contents: read
+  actions: read
+
+jobs:
+  analyze:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - run: npm ci
+
+      - run: npx turbo build --filter=@gf2t/core
+
+      - name: Run analysis
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          OWNER=$(echo "${{ inputs.repository }}" | cut -d'/' -f1)
+          REPO=$(echo "${{ inputs.repository }}" | cut -d'/' -f2)
+          node packages/core/dist/bin/analyze-github.js "$OWNER" "$REPO" gf2t-export.json
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: gf2t-export
+          path: gf2t-export.json
+          retention-days: 30
