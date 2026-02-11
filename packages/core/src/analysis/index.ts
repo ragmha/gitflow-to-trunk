@@ -1,2 +1,1 @@
-// Stub — implemented in core-analysis todo
-export {};
+export { analyzeRepository } from './analyzer.js';
